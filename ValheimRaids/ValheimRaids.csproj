@@ -87,6 +87,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Assets\AssetBundles\AssetBundles" />
+    <None Include="Assets\AssetBundles\AssetBundles.manifest" />
+    <None Include="Assets\AssetBundles\raid" />
+    <None Include="Assets\AssetBundles\raid.manifest" />
     <None Include="packages.config" />
     <None Include="README.md" />
   </ItemGroup>
@@ -102,6 +106,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="JotunnPostBuildTaskWin" Condition="'$(OS)' == 'Windows_NT'">
     <Exec Command="powershell.exe -ExecutionPolicy RemoteSigned -File &quot;$(SolutionDir)publish.ps1&quot; -Target &quot;$(ConfigurationName)&quot; -TargetPath &quot;$(TargetDir.TrimEnd('\'))&quot; -TargetAssembly &quot;$(TargetFileName)&quot; -ValheimPath &quot;$(VALHEIM_INSTALL.TrimEnd('\'))&quot; -DeployPath &quot;$(MOD_DEPLOYPATH.TrimEnd('\'))&quot; -ProjectPath &quot;$(ProjectDir.TrimEnd('\'))&quot; " />
+    <Exec Command="xcopy &quot;$(ProjectDir)Assets&quot; &quot;$(VALHEIM_INSTALL)\BepInEx\plugins\$(AssemblyName)\Assets\&quot; /S /Y" />
   </Target>
   <PropertyGroup>
     <BuildDependsOn>
