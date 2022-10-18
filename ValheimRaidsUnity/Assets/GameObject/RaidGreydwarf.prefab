@@ -1349,7 +1349,6 @@ GameObject:
   - component: {fileID: 114087082574672053}
   - component: {fileID: 114755357224024186}
   - component: {fileID: 114315141265919025}
-  - component: {fileID: 114398933098512513}
   - component: {fileID: 114668553073302709}
   m_Layer: 9
   m_Name: RaidGreydwarf
@@ -1728,50 +1727,6 @@ MonoBehaviour:
   m_consumeRange: 2
   m_consumeSearchRange: 5
   m_consumeSearchInterval: 10
---- !u!114 &114398933098512513
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1767670040194613}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1383431051, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_spawnOffset: {x: 0, y: 0, z: 0}
-  m_drops:
-  - m_prefab: {fileID: 1115029550600508, guid: afb925dd34c77c54f895644ffa852dd6, type: 3}
-    m_amountMin: 1
-    m_amountMax: 1
-    m_chance: 0.5
-    m_onePerPlayer: 0
-    m_levelMultiplier: 1
-  - m_prefab: {fileID: 1193738601704223, guid: 3bc7aa4cf236e1a49aa89e27a23c1034, type: 3}
-    m_amountMin: 1
-    m_amountMax: 1
-    m_chance: 1
-    m_onePerPlayer: 0
-    m_levelMultiplier: 1
-  - m_prefab: {fileID: 1550902154064709, guid: b9e82e5ff967b7c499e2dd86b39f9819, type: 3}
-    m_amountMin: 1
-    m_amountMax: 1
-    m_chance: 1
-    m_onePerPlayer: 0
-    m_levelMultiplier: 1
-  - m_prefab: {fileID: 1656603258196391, guid: 761246e5ea6eabe44adb3869de12e5a8, type: 3}
-    m_amountMin: 1
-    m_amountMax: 1
-    m_chance: 1
-    m_onePerPlayer: 0
-    m_levelMultiplier: 1
-  - m_prefab: {fileID: 1674395895993310, guid: b1639d7549bf0a84585a0781ed87d765, type: 3}
-    m_amountMin: 1
-    m_amountMax: 1
-    m_chance: 0.05
-    m_onePerPlayer: 0
-    m_levelMultiplier: 0
 --- !u!114 &114668553073302709
 MonoBehaviour:
   m_ObjectHideFlags: 0
