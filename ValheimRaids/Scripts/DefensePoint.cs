@@ -29,6 +29,8 @@ namespace ValheimRaids.Scripts
             instance = defensePointGameObject.GetComponent<DefensePoint>();
             instance.m_target = defensePointGameObject.GetComponentInChildren<StaticTarget>();
             Jotunn.Logger.LogDebug(instance.gameObject.name);
+            Jotunn.Logger.LogInfo("GameObject: " + instance.gameObject.transform.position);
+            Jotunn.Logger.LogInfo("StaticTarget: " + instance.m_target.transform.position);
         }
 
         public void Awake()

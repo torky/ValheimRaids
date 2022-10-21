@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
 using static ItemDrop;
@@ -45,12 +46,14 @@ namespace ValheimRaids.Scripts
             {
                 var staticTarget = DefensePoint.instance.m_target;
                 var itemData = SelectBestAttack(m_character as Humanoid, dt);
-                Vector3 vector = staticTarget.FindClosestPoint(base.transform.position);
-                if (Vector3.Distance(vector, base.transform.position) < itemData.m_shared.m_aiAttackRange && CanSeeTarget(staticTarget))
+                Vector3 closestPoint = staticTarget.FindClosestPoint(base.transform.position);
+                bool withinAttackRange = Vector3.Distance(closestPoint, transform.position) < itemData.m_shared.m_aiAttackRange && CanSeeTarget(staticTarget);
+                if (withinAttackRange && itemData != null && Time.time - m_lastAttackTime >= itemData.m_shared.m_aiAttackInterval)
                 {
                     LookAt(staticTarget.GetCenter());
                     bool canAttack = itemData != null && Time.time - itemData.m_lastAttackTime > itemData.m_shared.m_aiAttackInterval && !IsTakingOff();
-                    if (IsLookingAt(staticTarget.GetCenter(), itemData.m_shared.m_aiAttackMaxAngle) && canAttack)
+                    bool lookingAtTarget = IsLookingAt(staticTarget.GetCenter(), itemData.m_shared.m_aiAttackMaxAngle);
+                    if (withinAttackRange && canAttack && lookingAtTarget)
                     {
                         DoAttack(null);
                     }
@@ -61,9 +64,72 @@ namespace ValheimRaids.Scripts
                 }
                 else
                 {
-                    MoveTo(dt, vector, 0f, true);
+                    MoveTo(dt, closestPoint, 0f, true);
                 }
             }
+        }
+
+        public new bool MoveTo(float dt, Vector3 point, float dist, bool run)
+        {
+            if (!FindPath(point))
+            {
+                StopMoving();
+                return true;
+            }
+
+            if (m_path.Count == 0)
+            {
+                RetryFindPath(point);
+                return true;
+            }
+            float num = 0.5f;
+            Vector3 vector = m_path[0];
+            while (Utils.DistanceXZ(vector, base.transform.position) < num)
+            {
+                m_path.RemoveAt(0);
+                if (m_path.Count == 0)
+                {
+                    StopMoving();
+                    return true;
+                }
+                vector = m_path[0];
+            }
+            Vector3 normalized2 = (vector - base.transform.position).normalized;
+            MoveTowards(normalized2, run);
+            return false;
+        }
+
+        public new bool FindPath(Vector3 target)
+        {
+            float time = Time.time;
+            float num = time - m_lastFindPathTime;
+            if (num < 1f)
+            {
+                return m_lastFindPathResult;
+            }
+
+            if (Vector3.Distance(target, m_lastFindPathTarget) < 1f && num < 5f)
+            {
+                return m_lastFindPathResult;
+            }
+
+            m_lastFindPathTarget = target;
+            m_lastFindPathTime = time;
+            m_lastFindPathResult = Pathfinding.instance.GetPath(base.transform.position, target, m_path, m_pathAgentType);
+            return m_lastFindPathResult;
+        }
+
+        public bool RetryFindPath(Vector3 target)
+        {
+            float time = Time.time;
+            float num = time - m_lastFindPathTime;
+            if (num < 1f)
+            {
+                return m_lastFindPathResult;
+            }
+            m_lastFindPathTime = time;
+            m_lastFindPathResult = Pathfinding.instance.GetPath(base.transform.position, target, m_path, m_pathAgentType);
+            return m_lastFindPathResult;
         }
 
         private ItemData SelectBestAttack(Humanoid humanoid, float dt)
