@@ -37,8 +37,19 @@ namespace JotunnModStub
             Jotunn.Logger.LogInfo(string.Join(", ", raidAssets.GetAllAssetNames()));
 
             var greydwarf = raidAssets.LoadAsset<GameObject>("assets/gameobject/raidgreydwarf.prefab");
-            Destroy(greydwarf.GetComponent<MonsterAI>());
-            greydwarf.AddComponent<RaidAI>();
+            var monsterAI = greydwarf.GetComponent<MonsterAI>();
+            var raidAI = greydwarf.AddComponent<RaidAI>();
+            raidAI.m_viewRange = monsterAI.m_viewRange;
+            raidAI.m_viewAngle = monsterAI.m_viewAngle;
+            raidAI.m_hearRange = monsterAI.m_hearRange;
+            raidAI.m_alertedEffects = monsterAI.m_alertedEffects;
+            raidAI.m_idleSound = monsterAI.m_idleSound;
+            raidAI.m_idleSoundInterval = monsterAI.m_idleSoundInterval;
+            raidAI.m_idleSoundChance = monsterAI.m_idleSoundChance;
+            raidAI.m_pathAgentType = monsterAI.m_pathAgentType;
+            raidAI.m_moveMinAngle = monsterAI.m_moveMinAngle;
+            raidAI.m_smoothMovement = monsterAI.m_smoothMovement;
+            Destroy(monsterAI);
             Jotunn.Logger.LogInfo(greydwarf.name);
             CreatureConfig greydwarfConfig = new CreatureConfig
             {
@@ -49,13 +60,6 @@ namespace JotunnModStub
 
             var defensePoint = raidAssets.LoadAsset<GameObject>("assets/gameobject/defensepoint.prefab");
             defensePoint.AddComponent<DefensePoint>();
-            var piece = defensePoint.GetComponent<Piece>();
-            piece.m_placeEffect.m_effectPrefabs.AddItem(
-                new EffectList.EffectData
-                {
-
-                }
-            );
             Jotunn.Logger.LogInfo(defensePoint.name);
             CustomPiece defensePointPiece = new CustomPiece(defensePoint, "Hammer", false);
             PieceManager.Instance.AddPiece(defensePointPiece);
