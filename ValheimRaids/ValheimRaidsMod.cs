@@ -36,9 +36,18 @@ namespace JotunnModStub
             Jotunn.Logger.LogInfo(raidAssets.name);
             Jotunn.Logger.LogInfo(string.Join(", ", raidAssets.GetAllAssetNames()));
 
+            var raidFloor = raidAssets.LoadAsset<GameObject>("assets/gameobject/raid_floor_block.prefab");
+            Jotunn.Logger.LogInfo(raidFloor.name);
+            raidFloor.AddComponent<RaidTowerPiece>();
+            RaidBuilding.FloorPiecePrefab = raidFloor.GetComponent<Piece>();
+            CustomPiece raidFloorPiece = new CustomPiece(raidFloor, "Hammer", true);
+            PieceManager.Instance.AddPiece(raidFloorPiece);
+
             var greydwarf = raidAssets.LoadAsset<GameObject>("assets/gameobject/raidgreydwarf.prefab");
+            Jotunn.Logger.LogInfo(greydwarf.name);
             var monsterAI = greydwarf.GetComponent<MonsterAI>();
             var raidAI = greydwarf.AddComponent<RaidAI>();
+
             raidAI.m_viewRange = monsterAI.m_viewRange;
             raidAI.m_viewAngle = monsterAI.m_viewAngle;
             raidAI.m_hearRange = monsterAI.m_hearRange;
@@ -50,7 +59,6 @@ namespace JotunnModStub
             raidAI.m_moveMinAngle = monsterAI.m_moveMinAngle;
             raidAI.m_smoothMovement = monsterAI.m_smoothMovement;
             Destroy(monsterAI);
-            Jotunn.Logger.LogInfo(greydwarf.name);
             CreatureConfig greydwarfConfig = new CreatureConfig
             {
                 Name = greydwarf.name
@@ -59,8 +67,8 @@ namespace JotunnModStub
             CreatureManager.Instance.AddCreature(cc);
 
             var defensePoint = raidAssets.LoadAsset<GameObject>("assets/gameobject/defensepoint.prefab");
-            defensePoint.AddComponent<DefensePoint>();
             Jotunn.Logger.LogInfo(defensePoint.name);
+            defensePoint.AddComponent<RaidPoint>();
             CustomPiece defensePointPiece = new CustomPiece(defensePoint, "Hammer", false);
             PieceManager.Instance.AddPiece(defensePointPiece);
 
@@ -72,9 +80,9 @@ namespace JotunnModStub
         {
             static void Postfix(ref WearNTear __instance)
             {
-                if (__instance.gameObject.TryGetComponent(out DefensePoint point))
+                if (__instance.gameObject.TryGetComponent(out RaidPoint point))
                 {
-                    DefensePoint.SetDefensePoint(point.gameObject);
+                    RaidPoint.SetDefensePoint(point.gameObject);
                 }
             }
         }

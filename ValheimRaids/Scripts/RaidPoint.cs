@@ -7,9 +7,9 @@ using UnityEngine;
 
 namespace ValheimRaids.Scripts
 {
-    public class DefensePoint : MonoBehaviour
+    public class RaidPoint : MonoBehaviour
     {
-        public static DefensePoint instance = null;
+        public static RaidPoint instance = null;
         public StaticTarget m_target;
 
         public static void SetDefensePoint(GameObject defensePointGameObject)
@@ -26,7 +26,7 @@ namespace ValheimRaids.Scripts
                 });
                 Jotunn.Logger.LogDebug(wearNTear.m_health);
             }
-            instance = defensePointGameObject.GetComponent<DefensePoint>();
+            instance = defensePointGameObject.GetComponent<RaidPoint>();
             instance.m_target = defensePointGameObject.GetComponentInChildren<StaticTarget>();
             Jotunn.Logger.LogDebug(instance.gameObject.name);
             Jotunn.Logger.LogInfo("GameObject: " + instance.gameObject.transform.position);

@@ -82,8 +82,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\IgnoreAccessModifiers.cs" />
-    <Compile Include="Scripts\DefensePoint.cs" />
+    <Compile Include="Scripts\RaidPoint.cs" />
     <Compile Include="Scripts\RaidAI.cs" />
+    <Compile Include="Scripts\RaidBuilding.cs" />
+    <Compile Include="Scripts\RaidTower.cs" />
+    <Compile Include="Scripts\RaidTowerPiece.cs" />
+    <Compile Include="Scripts\RaidUtils.cs" />
     <Compile Include="ValheimRaidsMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
