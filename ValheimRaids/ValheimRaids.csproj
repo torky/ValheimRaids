@@ -82,6 +82,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\IgnoreAccessModifiers.cs" />
+    <Compile Include="Scripts\AI\TowerBuilder.cs" />
+    <Compile Include="Scripts\RaidAIStates.cs" />
     <Compile Include="Scripts\RaidPoint.cs" />
     <Compile Include="Scripts\RaidAI.cs" />
     <Compile Include="Scripts\RaidBuilding.cs" />

@@ -165,6 +165,7 @@ GameObject:
   m_Component:
   - component: {fileID: 783258922143974900}
   - component: {fileID: 5441536714300099076}
+  - component: {fileID: 4984489269694128096}
   - component: {fileID: 4786892613567939419}
   - component: {fileID: 6473110546042246599}
   - component: {fileID: 9029375093609014964}
@@ -209,6 +210,23 @@ MonoBehaviour:
   m_distant: 0
   m_type: 2
   m_syncInitialScale: 0
+--- !u!114 &4984489269694128096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7244153386553732960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1109157524, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_syncPosition: 1
+  m_syncRotation: 1
+  m_syncScale: 0
+  m_syncBodyVelocity: 1
+  m_characterParentSync: 0
 --- !u!114 &4786892613567939419
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -224,7 +242,7 @@ MonoBehaviour:
   m_primaryTarget: 0
   m_randomTarget: 0
   m_targetNonPlayerBuilt: 1
-  m_icon: {fileID: 0}
+  m_icon: {fileID: 21300000, guid: 9571d8b3552060a44bf32e6cb82cce3c, type: 3}
   m_name: raid_ramp
   m_description: 
   m_enabled: 1

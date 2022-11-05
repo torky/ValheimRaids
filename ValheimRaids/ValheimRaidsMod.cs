@@ -7,14 +7,13 @@ using Jotunn.Utils;
 using System.IO;
 using UnityEngine;
 using ValheimRaids.Scripts;
+using ValheimRaids.Scripts.AI;
 
-namespace JotunnModStub
-{
+namespace JotunnModStub {
     [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
     [BepInDependency(Jotunn.Main.ModGuid)]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.Minor)]
-    internal class RaidAIMod : BaseUnityPlugin
-    {
+    internal class RaidAIMod : BaseUnityPlugin {
         public const string PluginGUID = "torky.RaidAI";
         public const string PluginName = "RaidAI";
         public const string PluginVersion = "0.0.2";
@@ -25,8 +24,7 @@ namespace JotunnModStub
         // https://valheim-modding.github.io/Jotunn/tutorials/localization.html
         public static CustomLocalization Localization = LocalizationManager.Instance.GetLocalization();
 
-        private void Awake()
-        {
+        private void Awake() {
             m_harmony.PatchAll();
 
             // Jotunn comes with its own Logger class to provide a consistent Log style for all mods using it
@@ -53,7 +51,7 @@ namespace JotunnModStub
             var greydwarf = raidAssets.LoadAsset<GameObject>("assets/gameobject/raidgreydwarf.prefab");
             Jotunn.Logger.LogInfo(greydwarf.name);
             var monsterAI = greydwarf.GetComponent<MonsterAI>();
-            var raidAI = greydwarf.AddComponent<RaidAI>();
+            var raidAI = greydwarf.AddComponent<TowerBuilder>();
 
             raidAI.m_viewRange = monsterAI.m_viewRange;
             raidAI.m_viewAngle = monsterAI.m_viewAngle;
@@ -66,8 +64,7 @@ namespace JotunnModStub
             raidAI.m_moveMinAngle = monsterAI.m_moveMinAngle;
             raidAI.m_smoothMovement = monsterAI.m_smoothMovement;
             Destroy(monsterAI);
-            CreatureConfig greydwarfConfig = new CreatureConfig
-            {
+            CreatureConfig greydwarfConfig = new CreatureConfig {
                 Name = greydwarf.name
             };
             CustomCreature cc = new CustomCreature(greydwarf, true, greydwarfConfig);
@@ -83,12 +80,9 @@ namespace JotunnModStub
         }
 
         [HarmonyPatch(typeof(WearNTear), nameof(WearNTear.OnPlaced))]
-        class WearNTearBuildOnlyDefensePoint
-        {
-            static void Postfix(ref WearNTear __instance)
-            {
-                if (__instance.gameObject.TryGetComponent(out RaidPoint point))
-                {
+        class WearNTearBuildOnlyDefensePoint {
+            static void Postfix(ref WearNTear __instance) {
+                if (__instance.gameObject.TryGetComponent(out RaidPoint point)) {
                     RaidPoint.SetDefensePoint(point.gameObject);
                 }
             }

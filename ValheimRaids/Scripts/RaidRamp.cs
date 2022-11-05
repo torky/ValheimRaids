@@ -5,9 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace ValheimRaids.Scripts
-{
-    public class RaidRamp : MonoBehaviour
-    {
+namespace ValheimRaids.Scripts {
+    public class RaidRamp : MonoBehaviour {
     }
 }

@@ -6,15 +6,12 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace ValheimRaids.Scripts
-{
-    public class RaidBuilding
-    {
+namespace ValheimRaids.Scripts {
+    public class RaidBuilding {
         public static Piece FloorPiecePrefab;
         public static Piece RaidRampPrefab;
 
-        public static RaidTowerPiece PlacePiece(Piece piece, Vector3 position, Quaternion rotation)
-        {
+        public static RaidTowerPiece PlacePiece(Piece piece, Vector3 position, Quaternion rotation) {
             TerrainModifier.SetTriggerOnPlaced(trigger: true);
             GameObject gameObject = UnityEngine.Object.Instantiate(piece.gameObject, position, rotation);
             TerrainModifier.SetTriggerOnPlaced(trigger: false);
@@ -25,8 +22,7 @@ namespace ValheimRaids.Scripts
             return gameObject.GetComponent<RaidTowerPiece>();
         }
 
-        public static RaidTowerPiece PlaceFloorPiece(Vector3 position, Quaternion rotation)
-        {
+        public static RaidTowerPiece PlaceFloorPiece(Vector3 position, Quaternion rotation) {
             TerrainModifier.SetTriggerOnPlaced(trigger: true);
             GameObject gameObject = UnityEngine.Object.Instantiate(FloorPiecePrefab.gameObject, position, rotation);
             TerrainModifier.SetTriggerOnPlaced(trigger: false);
@@ -35,8 +31,7 @@ namespace ValheimRaids.Scripts
             return gameObject.GetComponent<RaidTowerPiece>();
         }
 
-        public static RaidRamp[] PlaceRampPieces(RaidTowerPiece floorPiece)
-        {
+        public static RaidRamp[] PlaceRampPieces(RaidTowerPiece floorPiece) {
             var position1 = floorPiece.ramp1.position + floorPiece.ramp1.right;
             var position2 = floorPiece.ramp2.position - floorPiece.ramp2.right;
             var rotation1 = floorPiece.transform.rotation * Quaternion.Euler(0, 180, 0);
