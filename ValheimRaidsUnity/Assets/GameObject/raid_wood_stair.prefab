@@ -1173,7 +1173,7 @@ MonoBehaviour:
   m_cultivatedGroundOnly: 0
   m_waterPiece: 0
   m_clipGround: 0
-  m_clipEverything: 0
+  m_clipEverything: 1
   m_noInWater: 0
   m_notOnWood: 0
   m_notOnTiltingSurface: 0

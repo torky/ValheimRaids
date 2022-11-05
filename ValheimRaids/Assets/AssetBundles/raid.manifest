@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 1597009121
+CRC: 116174466
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 5c2bca08ec9839ce6c2be7f67bd51974
+    Hash: 7a7bf6e39c5777d66504047477a2b745
   TypeTreeHash:
     serializedVersion: 2
-    Hash: e560d065b60a308e1fa403e2097ba323
+    Hash: 3dce26179347dcc568db6163e4dea53f
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -26,6 +26,8 @@ ClassTypes:
 - Class: 48
   Script: {instanceID: 0}
 - Class: 54
+  Script: {instanceID: 0}
+- Class: 59
   Script: {instanceID: 0}
 - Class: 64
   Script: {instanceID: 0}
@@ -62,6 +64,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 54271039, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
 - Class: 114
+  Script: {fileID: 2094620348, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
+- Class: 114
   Script: {fileID: 1578695569, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
 - Class: 114
   Script: {fileID: 69470131, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
@@ -82,6 +86,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 963225042, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
 - Class: 114
+  Script: {fileID: -347224168, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
+- Class: 114
   Script: {fileID: -1266444067, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
 - Class: 114
   Script: {fileID: -2116187367, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
@@ -93,8 +99,6 @@ ClassTypes:
   Script: {fileID: 829610738, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
 - Class: 114
   Script: {fileID: -2077285929, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
-- Class: 114
-  Script: {fileID: 2094620348, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
 - Class: 114
   Script: {fileID: 1282597392, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
 - Class: 114
@@ -159,6 +163,7 @@ SerializeReferenceClassIdentifiers:
 Assets:
 - Assets/GameObject/raid_floor_block.prefab
 - Assets/GameObject/raid_staircase.prefab
+- Assets/GameObject/raid_ramp.prefab
 - Assets/GameObject/DefensePoint.prefab
 - Assets/GameObject/raid_floor.prefab
 - Assets/GameObject/RaidGreydwarf.prefab

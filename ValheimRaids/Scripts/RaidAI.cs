@@ -16,185 +16,13 @@ namespace ValheimRaids.Scripts
 
         private StaticTarget Target => RaidPoint.instance?.m_target;
 
-        public enum State
-        {
-            NoTarget,
-            HasTarget,
-            TargetWithinRange,
-            Path,
-            NoPath,
-            Fall,
-            StartTower,
-            PathUpTower,
-            OnTopOfTower,
-            BuildingTower,
-            BuildingRamp,
-            ExitTower,
-        }
-
-        private State m_state;
-        private State previousState;
-
-        public void DetermineState(float dt)
-        {
-            if (!HasTarget())
-            {
-                m_state = State.NoTarget; 
-                return;
-            }
-            switch (m_state)
-            {
-                case State.NoTarget:
-                    if (HasTarget()) m_state = State.HasTarget;
-                    break;
-                case State.HasTarget:
-                    if (TargetIsInRange(dt)) m_state = State.TargetWithinRange;
-                    else if (HasPath()) m_state = State.Path;
-                    else m_state = State.NoPath;
-                    break;
-                case State.TargetWithinRange:
-                    if (!TargetIsInRange(dt)) m_state = State.HasTarget;
-                    break;
-                case State.Path:
-                    if (TargetIsInRange(dt)) m_state = State.TargetWithinRange;
-                    else if (!HasPath()) m_state = State.NoPath;
-                    break;
-                case State.NoPath:
-                    if (TargetIsInRange(dt)) m_state = State.TargetWithinRange;
-                    else if (HasNoObstruction()) m_state = State.Fall;
-                    else if (TowerExists()) m_state = State.PathUpTower;
-                    else if (HasPathToNearbyTower()) m_state = State.PathUpTower;
-                    else m_state = State.StartTower;
-                    break;
-                case State.Fall:
-                    if (HasPath()) m_state = State.Path;
-                    else m_state = State.NoPath;
-                    break;
-                case State.StartTower:
-                    if (TowerExists()) m_state = State.PathUpTower;
-                    break;
-                case State.PathUpTower:
-                    if (!TowerExists()) m_state = State.HasTarget;
-                    else if (IsOnTopOfTower()) m_state = State.OnTopOfTower;
-                    break;
-                case State.OnTopOfTower:
-                    if (!TowerExists()) m_state = State.HasTarget;
-                    else if (!IsOnTopOfTower()) m_state = State.HasTarget;
-                    else if (TowerNeedsHeight()) m_state = State.BuildingTower;
-                    else if (TowerNeedsRamp()) m_state = State.BuildingRamp;
-                    else if (TowerIsComplete()) m_state = State.ExitTower;
-                    break;
-                case State.BuildingTower:
-                    if (HasFullPath()) m_state = State.Path;
-                    else if (!TowerExists()) m_state = State.HasTarget;
-                    else if (!IsOnTopOfTower()) m_state = State.PathUpTower;
-                    else if (!TowerNeedsHeight()) m_state = State.BuildingRamp;
-                    break;
-                case State.BuildingRamp:
-                    if (!TowerExists()) m_state = State.HasTarget;
-                    else if (!IsOnTopOfTower()) m_state = State.HasTarget;
-                    else if (TowerIsComplete()) m_state = State.ExitTower;
-                    break;
-                case State.ExitTower:
-                    if (!TowerExists()) m_state = State.HasTarget;
-                    break;
-                default:
-                    throw new Exception("In unknown RaidAI state!");
-            }
-
-            if (m_state != previousState) Jotunn.Logger.LogInfo(m_state);
-            previousState = m_state;
-        }
-
-        public void ActOutState(float dt)
-        {
-            switch (m_state)
-            {
-                case State.NoTarget:
-                    break;
-                case State.HasTarget:
-                    break;
-                case State.TargetWithinRange:
-                    var itemData = SelectBestAttack(m_character as Humanoid, dt);
-                    LookAt(Target.GetCenter());
-                    if (itemData != null && Time.time - m_lastAttackTime >= itemData.m_shared.m_aiAttackInterval && CanSeeTarget(Target))
-                    {
-                        bool canAttack = itemData != null && Time.time - itemData.m_lastAttackTime > itemData.m_shared.m_aiAttackInterval && !IsTakingOff();
-                        bool lookingAtTarget = IsLookingAt(Target.GetCenter(), itemData.m_shared.m_aiAttackMaxAngle);
-                        if (canAttack && lookingAtTarget)
-                        {
-                            DoAttack(null);
-                        }
-                        else
-                        {
-                            StopMoving();
-                        }
-                    }
-                    break;
-                case State.Path:
-                    FollowPath();
-                    break;
-                case State.NoPath:
-                    break;
-                case State.Fall:
-                    Vector3 normalized = (RaidPoint.instance.transform.position - transform.position).normalized;
-                    MoveTowards(normalized, run: true);
-                    break;
-                case State.StartTower:
-                    LookAt(Target.GetCenter());
-                    timeTilBuild -= dt;
-                    if (timeTilBuild <= 0)
-                    {
-                        Quaternion rotate90 = Quaternion.Euler(0, 90, 0);
-                        Vector3 position = transform.position + transform.rotation * Vector3.back * 1.9f + transform.rotation * Vector3.left * 2;
-                        RaidTowerPiece rtp = RaidBuilding.PlaceFloorPiece(position, rotation: transform.rotation * rotate90);
-                        rtp.SetTower(RaidTower.maxTowerId + 1);
-                        tower = rtp.Tower;
-                        timeTilBuild = RaidTower.buildTime;
-                    }
-                    break;
-                case State.PathUpTower:
-                    if (FindPath(tower.TowerTop(), requireFullPath: true))
-                    {
-                        if (m_path.Count <= 0) return;
-                        Vector3 vector = m_path[0];
-                        while (Utils.DistanceXZ(vector, transform.position) < 0.5f)
-                        {
-                            m_path.RemoveAt(0);
-                            if (m_path.Count == 0)
-                            {
-                                StopMoving();
-                                return;
-                            }
-                            vector = m_path[0];
-                        }
-                        FollowPath();
-                    }
-                    break;
-                case State.OnTopOfTower:
-                    StopMoving();
-                    break;
-                case State.BuildingTower:
-                    StopMoving();
-                    tower.Build(dt);
-                    break;
-                case State.BuildingRamp:
-                    StopMoving();
-                    tower.BuildRamp();
-                    break;
-                case State.ExitTower:
-                    if (tower.ramp != null) transform.position = (Vector3)tower.ramp;
-                    tower = null;
-                    break;
-                default:
-                    throw new Exception("In unknown RaidAI state!");
-            }
-        }
-
         public override void Awake()
         {
             base.Awake();
             render = gameObject.AddComponent<LineRenderer>();
+            render.enabled = true;
+            render.startWidth = 0.1f;
+            render.endWidth = 0.1f;
         }
 
         public void Start()
@@ -220,10 +48,182 @@ namespace ValheimRaids.Scripts
             ActOutState(dt);
         }
 
+        public enum State
+        {
+            NoTarget,
+            HasTarget,
+            TargetWithinRange,
+            Path,
+            NoPath,
+            Fall,
+            StartTower,
+            AbandonTower,
+            PathUpTower,
+            OnTopOfTower,
+            BuildingTower,
+            BuildingRamp,
+            ExitTower,
+        }
+
+        private State m_state;
+        private State previousState;
+
+        public void DetermineState(float dt)
+        {
+            if (!HasTarget())
+            {
+                m_state = State.NoTarget; 
+                return;
+            }
+            switch (m_state)
+            {
+                case State.NoTarget:
+                    if (HasTarget()) m_state = State.HasTarget;
+                    break;
+                case State.HasTarget:
+                    if (TargetIsInRange(dt)) m_state = State.TargetWithinRange;
+                    else if (HasPathToTarget()) m_state = State.Path;
+                    else m_state = State.NoPath;
+                    break;
+                case State.TargetWithinRange:
+                    if (!TargetIsInRange(dt)) m_state = State.HasTarget;
+                    break;
+                case State.Path:
+                    if (TargetIsInRange(dt)) m_state = State.TargetWithinRange;
+                    else if (!HasPathToTarget()) m_state = State.NoPath;
+                    break;
+                case State.NoPath:
+                    if (TargetIsInRange(dt)) m_state = State.TargetWithinRange;
+                    else if (HasNoObstruction()) m_state = State.Fall;
+                    else if (HasPathToNearbyTower()) m_state = State.PathUpTower;
+                    else m_state = State.StartTower;
+                    break;
+                case State.Fall:
+                    if (TargetIsInRange(dt)) m_state = State.TargetWithinRange;
+                    else if (HasPathToTarget()) m_state = State.Path;
+                    else m_state = State.NoPath;
+                    break;
+                case State.StartTower:
+                    if (TowerExists() && HasPathUpTower()) m_state = State.PathUpTower;
+                    else if (TowerExists()) m_state = State.AbandonTower;
+                    break;
+                case State.AbandonTower:
+                    if (!TowerExists()) m_state = State.HasTarget;
+                    break;
+                case State.PathUpTower:
+                    if (!TowerExists()) m_state = State.HasTarget;
+                    else if (IsOnTopOfTower()) m_state = State.OnTopOfTower;
+                    else if (!HasPathUpTower()) m_state = State.AbandonTower;
+                    break;
+                case State.OnTopOfTower:
+                    if (!TowerExists()) m_state = State.HasTarget;
+                    else if (!IsOnTopOfTower()) m_state = State.HasTarget;
+                    else if (TowerNeedsHeight()) m_state = State.BuildingTower;
+                    else if (TowerNeedsRamp()) m_state = State.BuildingRamp;
+                    else if (TowerIsComplete()) m_state = State.ExitTower;
+                    break;
+                case State.BuildingTower:
+                    if (!TowerExists()) m_state = State.HasTarget;
+                    else if (!IsOnTopOfTower() && HasPathUpTower()) m_state = State.PathUpTower;
+                    else if (!TowerNeedsHeight()) m_state = State.BuildingRamp;
+                    break;
+                case State.BuildingRamp:
+                    if (!TowerExists()) m_state = State.HasTarget;
+                    else if (TowerIsComplete()) m_state = State.ExitTower;
+                    break;
+                case State.ExitTower:
+                    if (!TowerExists()) m_state = State.HasTarget;
+                    else if (TowerIsComplete() && TowerRampHasFallen(dt)) m_state = State.HasTarget;
+                    break;
+                default:
+                    throw new Exception("In unknown RaidAI state!");
+            }
+
+            if (m_state != previousState) Jotunn.Logger.LogInfo(m_state);
+            previousState = m_state;
+        }
+
+        public void ActOutState(float dt)
+        {
+            switch (m_state)
+            {
+                case State.NoTarget: case State.HasTarget: case State.NoPath: case State.ExitTower: break;
+                case State.TargetWithinRange:
+                    TargetWithinRange(dt); break;
+                case State.Path:
+                    FollowPath(); break;
+                case State.Fall:
+                    Fall(); break;
+                case State.StartTower:
+                    StartTower(dt); break;
+                case State.AbandonTower:
+                    tower = null; break;
+                case State.PathUpTower:
+                    FollowPath(); break;
+                case State.OnTopOfTower:
+                    StopMoving(); break;
+                case State.BuildingTower:
+                    StopMoving();
+                    tower.Build(dt); break;
+                case State.BuildingRamp:
+                    StopMoving();
+                    tower.BuildRamp(); break;
+                default:
+                    throw new Exception("In unknown RaidAI state!");
+            }
+        }
+
+        public void TargetWithinRange(float dt)
+        {
+            var itemData = SelectBestAttack(m_character as Humanoid, dt);
+            LookAt(Target.GetCenter());
+            if (itemData != null && Time.time - m_lastAttackTime >= itemData.m_shared.m_aiAttackInterval && CanSeeTarget(Target))
+            {
+                bool canAttack = itemData != null && Time.time - itemData.m_lastAttackTime > itemData.m_shared.m_aiAttackInterval && !IsTakingOff();
+                bool lookingAtTarget = IsLookingAt(Target.GetCenter(), itemData.m_shared.m_aiAttackMaxAngle);
+                if (canAttack && lookingAtTarget)
+                {
+                    DoAttack(null);
+                }
+                else
+                {
+                    StopMoving();
+                }
+            }
+        }
+
+        public void Fall()
+        {
+            Vector3 normalized = (RaidPoint.instance.transform.position - transform.position).normalized;
+            MoveTowards(normalized, run: true);
+        }
+
+        public void StartTower(float dt)
+        {
+            StopMoving();
+            LookAt(Target.GetCenter());
+            timeTilBuild -= dt;
+            if (timeTilBuild <= 0)
+            {
+                tower = RaidTower.StartTower(transform);
+                timeTilBuild = RaidTower.buildTime;
+            }
+        }
+
         public void FollowPath()
         {
             if (m_path.Count == 0) return;
             Vector3 vector = m_path[0];
+            while (Utils.DistanceXZ(vector, transform.position) < 0.5f)
+            {
+                m_path.RemoveAt(0);
+                if (m_path.Count == 0)
+                {
+                    StopMoving();
+                    return;
+                }
+                vector = m_path[0];
+            }
             Vector3 normalized2 = (vector - transform.position).normalized;
             MoveTowards(normalized2, run: true);
         }
@@ -232,12 +232,8 @@ namespace ValheimRaids.Scripts
         {
             float time = Time.time;
             float num = time - m_lastFindPathTime;
-            if (num < 1f)
-            {
-                return m_lastFindPathResult;
-            }
 
-            if (Vector3.Distance(target, m_lastFindPathTarget) < 1f && num < 5f)
+            if (Vector3.Distance(target, m_lastFindPathTarget) < 0.5f && num < 5f)
             {
                 return m_lastFindPathResult;
             }
@@ -304,16 +300,22 @@ namespace ValheimRaids.Scripts
             return tower.IsComplete();
         }
 
+        private bool TowerRampHasFallen(float dt)
+        {
+            return tower.RampHasFallen(dt);
+        }
+
         private bool IsOnTopOfTower()
         {
             var distance = Vector3.Distance(tower.TowerTop(), transform.position);
-            Jotunn.Logger.LogInfo("Top:" + tower.TowerTop() + ", pos:" + transform.position + ", dist:" + distance);
-            return distance < 0.5f;
+            return distance <= 0.5f;
         }
 
         private bool HasNoObstruction()
         {
-            return !RaidUtils.RayCastStraight(origin: transform.position, end: RaidPoint.instance.transform.position, out _, RaidTower.towerScanDistance);
+            bool hit = !RaidUtils.RayCastStraight(origin: transform.position, end: RaidPoint.instance.transform.position, out RaycastHit raycast, render, RaidTower.towerScanDistance);
+            Jotunn.Logger.LogInfo(raycast.transform?.gameObject?.name);
+            return hit;
         }
 
         private bool HasPathToNearbyTower()
@@ -326,7 +328,7 @@ namespace ValheimRaids.Scripts
                 var withinRange = Vector2.Distance(aiPos, towerPos) <= m_towerSearchRange;
                 if (!withinRange) continue;
                 var path = new List<Vector3>();
-                var hasFullPath = Pathfinding.instance.GetPath(transform.position, tower.TowerTop(), path, m_pathAgentType, requireFullPath: true);
+                var hasFullPath = Pathfinding.instance.GetPath(transform.position, tower.TowerTop(), m_path, m_pathAgentType, requireFullPath: true);
                 if (hasFullPath)
                 {
                     m_path = path;
@@ -337,50 +339,35 @@ namespace ValheimRaids.Scripts
             return false;
         }
 
-        private bool HasPath()
+        private bool HasPathToTarget()
         {
-            Vector3 closestPoint = Target.FindClosestPoint(transform.position);
-            bool foundPath = FindPath(closestPoint);
-            if (!foundPath || m_path.Count <= 0) return false;
-            Vector3 vector = m_path[0];
-            while (Utils.DistanceXZ(vector, transform.position) < 0.5f)
-            {
-                m_path.RemoveAt(0);
-                if (m_path.Count == 0)
-                {
-                    StopMoving();
-                    return false;
-                }
-                vector = m_path[0];
-            }
-
-            return true;
+            return SearchForPath(Target.FindClosestPoint(transform.position));
         }
 
-        private bool HasFullPath()
+        private bool HasPathUpTower()
         {
-            Vector3 closestPoint = Target.FindClosestPoint(transform.position);
-            var path = new List<Vector3>();
-            var hasFullPath = Pathfinding.instance.GetPath(transform.position, closestPoint, path, m_pathAgentType, requireFullPath: true);
-            if (hasFullPath) m_path = path;
-            return hasFullPath;
+            bool hasPath = SearchForPath(tower.TowerTop(), requireFullPath: true);
+            return hasPath;
+        }
+        private bool SearchForPath(Vector3 destination, bool requireFullPath = false)
+        {
+            bool foundPath = FindPath(destination, requireFullPath);
+            if (!foundPath || m_path.Count <= 0) return false;
+            var distance = Vector3.Distance(m_path[m_path.Count-1], transform.position);
+            return m_path.Count > 0 && distance >= 0.3;
         }
 
         private bool TargetIsInRange(float dt)
         {
             Vector3 closestPoint = Target.FindClosestPoint(transform.position);
             var itemData = SelectBestAttack(m_character as Humanoid, dt);
-            RaidUtils.RayCastStraight(transform.position, Target.transform.position, out RaycastHit raycast);
-
-            render.enabled = true;
-            var vect = transform.position;
-            vect.y += .5f;
-            render.SetPosition(0, vect);
-            render.SetPosition(1, raycast.point);
+            render.startColor = Color.green;
+            render.endColor = Color.green;
+            RaidUtils.RayCastStraight(transform.position, Target.transform.position, out RaycastHit raycast, render);
 
             if (raycast.transform == null) return false;
             var hasRaidPoint = raycast.transform.gameObject?.transform?.parent?.TryGetComponent<RaidPoint>(out _) ?? false;
-            return Vector3.Distance(closestPoint, transform.position) < itemData.m_shared.m_aiAttackRange && hasRaidPoint;
+            return Vector3.Distance(closestPoint, transform.position) < itemData.m_shared.m_aiAttackRange && hasRaidPoint || Vector3.Distance(closestPoint, transform.position) < 0.5f;
         }
 
         public bool HasTarget()

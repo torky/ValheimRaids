@@ -457,7 +457,7 @@ MonoBehaviour:
   m_notOnTiltingSurface: 0
   m_inCeilingOnly: 0
   m_notOnFloor: 0
-  m_noClipping: 0
+  m_noClipping: 1
   m_onlyInTeleportArea: 0
   m_allowedInDungeons: 0
   m_spaceRequirement: 0

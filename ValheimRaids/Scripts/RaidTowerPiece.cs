@@ -14,10 +14,25 @@ namespace ValheimRaids.Scripts
         internal RaidTower Tower => RaidTower.raidTowers.GetValueSafe(m_towerId);
         private ZNetView m_nview;
         int m_towerId = 0;
+        public Transform ramp1;
+        public Transform point5;
+        public Transform point6;
+        public Transform ramp2;
+        public Transform point7;
+        public Transform point8;
+
+        public RaidRamp rampBuilt1;
+        public RaidRamp rampBuilt2;
 
         public void Awake()
         {
             m_nview = GetComponent<ZNetView>();
+            ramp1 = transform.Find("floor/ramppoint1");
+            point5 = transform.Find("floor/point5");
+            point6 = transform.Find("floor/point6");
+            ramp2 = transform.Find("floor/ramppoint2");
+            point7 = transform.Find("floor/point7");
+            point8 = transform.Find("floor/point8");
 
             if ((bool)m_nview && m_nview.IsValid())
             {

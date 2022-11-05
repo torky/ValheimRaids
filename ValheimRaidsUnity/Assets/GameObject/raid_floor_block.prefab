@@ -65,6 +65,9 @@ Transform:
   - {fileID: 2589793591619563585}
   - {fileID: 8373022985920336372}
   - {fileID: 4187140128431614597}
+  - {fileID: 5436943534667749509}
+  - {fileID: 4373200164691137174}
+  - {fileID: 4182394425618925742}
   - {fileID: 4626810190936266841}
   m_Father: {fileID: 7233833323437351785}
   m_RootOrder: 1
@@ -98,7 +101,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3874509030414370642}
-  m_RootOrder: 8
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 45, y: 0, z: 0}
 --- !u!65 &2948133634704091143
 BoxCollider:
@@ -184,7 +187,7 @@ GameObject:
   - component: {fileID: 7233833323437351785}
   - component: {fileID: -7354456804655373921}
   - component: {fileID: 4767794869050834625}
-  - component: {fileID: 3371839718630877063}
+  - component: {fileID: 8749232204968001171}
   m_Layer: 10
   m_Name: raid_floor_block
   m_TagString: Untagged
@@ -294,7 +297,7 @@ MonoBehaviour:
   m_distant: 0
   m_type: 2
   m_syncInitialScale: 0
---- !u!114 &3371839718630877063
+--- !u!114 &8749232204968001171
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -303,18 +306,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2307519852400709683}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 895252998, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
+  m_Script: {fileID: -347224168, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_new: {fileID: 0}
-  m_worn: {fileID: 0}
-  m_broken: {fileID: 0}
-  m_wet: {fileID: 0}
-  m_noRoofWear: 0
-  m_noSupportWear: 1
-  m_materialType: 0
-  m_supports: 1
-  m_comOffset: {x: 0, y: 0, z: 0}
+  m_destructibleType: 1
   m_health: 400
   m_damages:
     m_blunt: 0
@@ -327,8 +322,12 @@ MonoBehaviour:
     m_lightning: 0
     m_poison: 3
     m_spirit: 3
+  m_minDamageTreshold: 0
+  m_minToolTier: 0
   m_hitNoise: 0
   m_destroyNoise: 0
+  m_ttl: 0
+  m_spawnWhenDestroyed: {fileID: 0}
   m_destroyedEffect:
     m_effectPrefabs:
     - m_prefab: {fileID: 1239923081523999, guid: 904daa8a016dd314fa9b4103b1409dec,
@@ -363,11 +362,7 @@ MonoBehaviour:
       m_randomRotation: 0
       m_scale: 0
       m_childTransform: 
-  m_switchEffect:
-    m_effectPrefabs: []
   m_autoCreateFragments: 1
-  m_fragmentRoots:
-  - {fileID: 3498361340702302797, guid: d52af1ac91d10e24d9f8c3cb23583242, type: 3}
 --- !u!1 &2985099565741080983
 GameObject:
   m_ObjectHideFlags: 0
@@ -477,6 +472,66 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 20, y: 20, z: 0.1}
   m_Center: {x: -29, y: 49, z: 0.95}
+--- !u!1 &4716788470808970406
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5436943534667749509}
+  m_Layer: 10
+  m_Name: point8
+  m_TagString: snappoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &5436943534667749509
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4716788470808970406}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: -2, y: 2, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3874509030414370642}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!1 &5059139718872184104
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4182394425618925742}
+  m_Layer: 10
+  m_Name: ramppoint2
+  m_TagString: snappoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &4182394425618925742
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5059139718872184104}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2, y: 2, z: 0.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3874509030414370642}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6052733100272653351
 GameObject:
   m_ObjectHideFlags: 0
@@ -517,7 +572,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4187140128431614597}
   m_Layer: 10
-  m_Name: _snappoint (7)
+  m_Name: point7
   m_TagString: snappoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -530,13 +585,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6311733860659527753}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: -2, y: 2, z: -1.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3874509030414370642}
   m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &6635227232442513691
 GameObject:
   m_ObjectHideFlags: 0
@@ -547,7 +602,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8373022985920336372}
   m_Layer: 10
-  m_Name: _snappoint (6)
+  m_Name: point6
   m_TagString: snappoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -566,6 +621,36 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3874509030414370642}
   m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7503235636779669248
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4373200164691137174}
+  m_Layer: 10
+  m_Name: ramppoint1
+  m_TagString: snappoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &4373200164691137174
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7503235636779669248}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2, y: 2, z: 0.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3874509030414370642}
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8147542350957608380
 GameObject:
@@ -607,7 +692,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2589793591619563585}
   m_Layer: 10
-  m_Name: _snappoint (5)
+  m_Name: point5
   m_TagString: snappoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

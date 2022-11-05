@@ -43,6 +43,13 @@ namespace JotunnModStub
             CustomPiece raidFloorPiece = new CustomPiece(raidFloor, "Hammer", true);
             PieceManager.Instance.AddPiece(raidFloorPiece);
 
+            var raidRamp = raidAssets.LoadAsset<GameObject>("assets/gameobject/raid_ramp.prefab");
+            Jotunn.Logger.LogInfo(raidRamp.name);
+            raidRamp.AddComponent<RaidRamp>();
+            RaidBuilding.RaidRampPrefab = raidRamp.GetComponent<Piece>();
+            CustomPiece raidRampPiece = new CustomPiece(raidRamp, "Hammer", true);
+            PieceManager.Instance.AddPiece(raidRampPiece);
+
             var greydwarf = raidAssets.LoadAsset<GameObject>("assets/gameobject/raidgreydwarf.prefab");
             Jotunn.Logger.LogInfo(greydwarf.name);
             var monsterAI = greydwarf.GetComponent<MonsterAI>();
