@@ -17,6 +17,7 @@ namespace ValheimRaids.Scripts {
         public const string PathUpTower = "PathUpTower";
         public const string OnTopOfTower = "OnTopOfTower";
         public const string BuildingTower = "BuildingTower";
+        public const string BuildingTowerRamp = "BuildingTowerRamp";
         public const string ExitTower = "ExitTower";
     }
 }

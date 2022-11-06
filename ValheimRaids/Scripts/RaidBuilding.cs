@@ -31,7 +31,7 @@ namespace ValheimRaids.Scripts {
             return gameObject.GetComponent<RaidTowerPiece>();
         }
 
-        public static RaidRamp[] PlaceRampPieces(RaidTowerPiece floorPiece) {
+        public static void PlaceRampPieces(RaidTowerPiece floorPiece) {
             var position1 = floorPiece.ramp1.position + floorPiece.ramp1.right;
             var position2 = floorPiece.ramp2.position - floorPiece.ramp2.right;
             var rotation1 = floorPiece.transform.rotation * Quaternion.Euler(0, 180, 0);
@@ -46,8 +46,8 @@ namespace ValheimRaids.Scripts {
             Jotunn.Logger.LogMessage("Placed Piece " + RaidRampPrefab.name + " at " + position1 + "::" + rotation1);
             Jotunn.Logger.LogMessage("Placed Piece " + RaidRampPrefab.name + " at " + position2 + "::" + rotation2);
 
-            RaidRamp[] ramps = { ramp1.GetComponent<RaidRamp>(), ramp2.GetComponent<RaidRamp>() };
-            return ramps;
+            floorPiece.rampBuilt1 = ramp1.GetComponent<RaidRamp>();
+            floorPiece.rampBuilt2 = ramp2.GetComponent<RaidRamp>();
         }
     }
 }

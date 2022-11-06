@@ -12,21 +12,21 @@ namespace ValheimRaids.Scripts {
         public static float towerScanDistance = 2f;
         public static int maxTowerId = 0;
         public static float buildTime = 5f;
-        public static float towerFinishTime = 3f;
+        public static float towerFinishTime = 1f;
 
-        public static RaidTower StartTower(Transform transform) {
-            Quaternion rotate90 = Quaternion.Euler(0, 90, 0);
-            Vector3 position = transform.position + transform.rotation * Vector3.back * 1.9f + transform.rotation * Vector3.left * 2;
-            RaidTowerPiece raidTowerPiece = BuildPiece(position, rotation: transform.rotation * rotate90);
+        public static RaidTower StartTower(Transform transform, Quaternion rotation) {
+            Quaternion rotate90 = Quaternion.Euler(0, -90, 0);
+            Vector3 look = rotation.eulerAngles;
+            look = new Vector3(0, look.y, 0);
+            Quaternion yRotation = Quaternion.Euler(look);
+            Vector3 position = transform.position + yRotation * Vector3.forward * 1.9f + yRotation * Vector3.right * 2f + Vector3.down * 0.1f;
+            RaidTowerPiece raidTowerPiece = BuildPiece(position, rotation: yRotation * rotate90);
             raidTowerPiece.SetTower(maxTowerId + 1);
             return raidTowerPiece.Tower;
         }
 
         private static RaidTowerPiece BuildPiece(Vector3 position, Quaternion rotation) {
             var piece = RaidBuilding.PlaceFloorPiece(position, rotation);
-            RaidRamp[] ramps = RaidBuilding.PlaceRampPieces(piece);
-            piece.rampBuilt1 = ramps[0];
-            piece.rampBuilt2 = ramps[1];
             return piece;
         }
 
@@ -42,7 +42,7 @@ namespace ValheimRaids.Scripts {
         }
 
         internal bool IsComplete() {
-            return !NeedsHeight();
+            return !NeedsRamp();
         }
 
         internal bool NeedsHeight() {
@@ -60,8 +60,11 @@ namespace ValheimRaids.Scripts {
             return Top().rampBuilt1 == null && Top().rampBuilt2 == null;
         }
 
-        internal bool RampHasFallen(float dt) {
+        internal void UpdateRampWait(float dt) {
             rampWaitTime += dt;
+        }
+
+        internal bool RampHasFallen() {
             return rampWaitTime >= towerFinishTime;
         }
 
@@ -94,6 +97,14 @@ namespace ValheimRaids.Scripts {
                 piece.SetTower(towerId);
                 pieces.Add(piece);
                 timeTilBuild = buildTime;
+            }
+        }
+
+        internal void BuildRamp() {
+            foreach (var piece in pieces) {
+                if (piece.rampBuilt1 == null && piece.rampBuilt2 == null) {
+                    RaidBuilding.PlaceRampPieces(piece);
+                }
             }
         }
     }

@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 865538603
+CRC: 4001366522
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 232ed605f0f936010b60e96cb540516f
+    Hash: ffe03159100af86a7458a59eb80b3eca
   TypeTreeHash:
     serializedVersion: 2
     Hash: 3dce26179347dcc568db6163e4dea53f
@@ -166,6 +166,7 @@ Assets:
 - Assets/GameObject/raid_ramp.prefab
 - Assets/GameObject/DefensePoint.prefab
 - Assets/GameObject/raid_floor.prefab
+- Assets/GameObject/raid_plank.prefab
 - Assets/GameObject/RaidGreydwarf.prefab
 - Assets/GameObject/raid_wood_stair.prefab
 - Assets/GameObject/view_line.prefab

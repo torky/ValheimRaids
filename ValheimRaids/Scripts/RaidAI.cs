@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static ItemDrop;
 
@@ -7,9 +8,8 @@ namespace ValheimRaids.Scripts {
     public class RaidAI : BaseAI {
         protected float m_updateWeaponTimer;
         protected float m_lastAttackTime;
-        protected float timeTilBuild = RaidTower.buildTime;
-        protected readonly float m_towerSearchRange = 5f;
         protected LineRenderer render;
+        protected readonly float m_towerSearchRange = 7f;
         public RaidTower tower;
 
         protected StaticTarget Target => RaidPoint.instance?.m_target;
@@ -48,6 +48,38 @@ namespace ValheimRaids.Scripts {
 
         public virtual void ActOutState(float dt) { }
 
+        protected bool TowerExists() {
+            if (tower != null && tower.TopPiece() == null) tower = null;
+            return tower != null;
+        }
+
+        protected bool IsOnTopOfTower() {
+            var distance = Vector3.Distance(tower.TowerTop(), transform.position);
+            return distance <= 0.5f;
+        }
+        protected bool HasPathToNearbyTower() {
+            foreach (var tower in RaidTower.raidTowers.Values) {
+                if (tower == null || tower.TopPiece() == null) continue;
+                Vector2 aiPos = new Vector2(transform.position.x, transform.position.z);
+                Vector2 towerPos = new Vector2(tower.TopPiece().transform.position.x, tower.TopPiece().transform.position.z);
+                var withinRange = Vector2.Distance(aiPos, towerPos) <= m_towerSearchRange;
+                if (!withinRange) continue;
+                var path = new List<Vector3>();
+                var hasPath = Pathfinding.instance.GetPath(transform.position, tower.TowerTop(), path, m_pathAgentType, requireFullPath: true);
+                if (hasPath) {
+                    m_path = path;
+                    this.tower = tower;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        protected bool HasPathUpTower(bool useCache = false) {
+            bool hasPath = SearchForPath(tower.TowerTop(), requireFullPath: true, useCache);
+            return hasPath;
+        }
+
         public void TargetWithinRange(float dt) {
             var itemData = SelectBestAttack(m_character as Humanoid, dt);
             LookAt(Target.GetCenter());
@@ -62,16 +94,6 @@ namespace ValheimRaids.Scripts {
         public void Fall() {
             Vector3 normalized = (RaidPoint.instance.transform.position - transform.position).normalized;
             MoveTowards(normalized, run: true);
-        }
-
-        public void StartTower(float dt) {
-            StopMoving();
-            LookAt(Target.GetCenter());
-            timeTilBuild -= dt;
-            if (timeTilBuild <= 0) {
-                tower = RaidTower.StartTower(transform);
-                timeTilBuild = RaidTower.buildTime;
-            }
         }
 
         public void FollowPath() {
@@ -89,11 +111,11 @@ namespace ValheimRaids.Scripts {
             MoveTowards(normalized2, run: true);
         }
 
-        public bool FindPath(Vector3 target, bool requireFullPath = false) {
+        public bool FindPath(Vector3 target, bool requireFullPath = false, bool useCache = true) {
             float time = Time.time;
             float num = time - m_lastFindPathTime;
 
-            if (Vector3.Distance(target, m_lastFindPathTarget) < 0.5f && num < 5f)  return m_lastFindPathResult;
+            if (Vector3.Distance(target, m_lastFindPathTarget) < 0.5f && num < 2f && useCache)  return m_lastFindPathResult;
 
             m_lastFindPathTarget = target;
             m_lastFindPathTime = time;
@@ -123,69 +145,22 @@ namespace ValheimRaids.Scripts {
             return false;
         }
 
-        protected bool TowerExists() {
-            if (tower != null && tower.TopPiece() == null)  tower = null;
-            return tower != null;
-        }
-
-        protected bool TowerNeedsHeight() {
-            return tower.NeedsHeight();
-        }
-
-        protected bool TowerNeedsRamp() {
-            return tower.NeedsRamp();
-        }
-
-        protected bool TowerIsComplete() {
-            return tower.IsComplete();
-        }
-
-        protected bool TowerRampHasFallen(float dt) {
-            return tower.RampHasFallen(dt);
-        }
-
-        protected bool IsOnTopOfTower() {
-            var distance = Vector3.Distance(tower.TowerTop(), transform.position);
-            return distance <= 0.5f;
-        }
-
-        protected bool HasNoObstruction() {
-            bool hit = !RaidUtils.RayCastStraight(origin: transform.position, end: RaidPoint.instance.transform.position, out RaycastHit raycast, render, RaidTower.towerScanDistance);
+        protected bool HasNoObstruction(float scanDistance) {
+            bool hit = !RaidUtils.RayCastStraight(origin: transform.position, end: RaidPoint.instance.transform.position, out RaycastHit raycast, render, scanDistance);
             Jotunn.Logger.LogInfo(raycast.transform?.gameObject?.name);
             return hit;
         }
 
-        protected bool HasPathToNearbyTower() {
-            foreach (var tower in RaidTower.raidTowers.Values) {
-                if (tower == null || tower.TopPiece() == null) continue;
-                Vector2 aiPos = new Vector2(transform.position.x, transform.position.z);
-                Vector2 towerPos = new Vector2(tower.TopPiece().transform.position.x, tower.TopPiece().transform.position.z);
-                var withinRange = Vector2.Distance(aiPos, towerPos) <= m_towerSearchRange;
-                if (!withinRange) continue;
-                var path = new List<Vector3>();
-                var hasFullPath = Pathfinding.instance.GetPath(transform.position, tower.TowerTop(), m_path, m_pathAgentType);
-                if (hasFullPath) {
-                    m_path = path;
-                    this.tower = tower;
-                    return true;
-                }
-            }
-            return false;
+        protected bool HasPathToTarget(bool requireFullPath = false) {
+            return SearchForPath(Target.FindClosestPoint(transform.position), requireFullPath);
         }
 
-        protected bool HasPathToTarget() {
-            return SearchForPath(Target.FindClosestPoint(transform.position));
-        }
-
-        protected bool HasPathUpTower() {
-            bool hasPath = SearchForPath(tower.TowerTop());
-            return hasPath;
-        }
-        protected bool SearchForPath(Vector3 destination, bool requireFullPath = false) {
-            bool foundPath = FindPath(destination, requireFullPath);
+        protected bool SearchForPath(Vector3 destination, bool requireFullPath = false, bool useCache = true) {
+            bool foundPath = FindPath(destination, requireFullPath, useCache);
             if (!foundPath || m_path.Count <= 0) return false;
-            var distance = Vector3.Distance(m_path[m_path.Count - 1], transform.position);
-            return m_path.Count > 0 && distance >= 0.3;
+            var endDistanceFromPosition = Vector3.Distance(m_path.Last(), transform.position);
+            var endDistanceFromDestination = Vector3.Distance(m_path.Last(), destination);
+            return m_path.Count > 0 && endDistanceFromPosition >= 0.3f && (!requireFullPath || endDistanceFromDestination <= 0.3f);
         }
 
         protected bool TargetIsInRange(float dt) {
