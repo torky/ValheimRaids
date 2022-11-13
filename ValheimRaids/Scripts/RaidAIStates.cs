@@ -12,6 +12,9 @@ namespace ValheimRaids.Scripts {
         public const string Path = "Path";
         public const string NoPath = "NoPath";
         public const string Fall = "Fall";
+    }
+
+    public static class TowerState {
         public const string StartTower = "StartTower";
         public const string AbandonTower = "AbandonTower";
         public const string PathUpTower = "PathUpTower";
@@ -19,5 +22,13 @@ namespace ValheimRaids.Scripts {
         public const string BuildingTower = "BuildingTower";
         public const string BuildingTowerRamp = "BuildingTowerRamp";
         public const string ExitTower = "ExitTower";
+    }
+
+    public static class RampState {
+        public const string Building = "Building";
+        public const string BuildingStairs = "BuildingStairs";
+        public const string BuildingRamp = "BuildingRamp";
+        public const string BuildingPlank = "BuildingPlank";
+        public const string DoneBuilding = "DoneBuilding";
     }
 }

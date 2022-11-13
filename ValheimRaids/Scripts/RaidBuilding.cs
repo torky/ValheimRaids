@@ -10,24 +10,15 @@ namespace ValheimRaids.Scripts {
     public class RaidBuilding {
         public static Piece FloorPiecePrefab;
         public static Piece RaidRampPrefab;
-
-        public static RaidTowerPiece PlacePiece(Piece piece, Vector3 position, Quaternion rotation) {
-            TerrainModifier.SetTriggerOnPlaced(trigger: true);
-            GameObject gameObject = UnityEngine.Object.Instantiate(piece.gameObject, position, rotation);
-            TerrainModifier.SetTriggerOnPlaced(trigger: false);
-            WearNTear wearNTear = gameObject.GetComponent<WearNTear>();
-            wearNTear.OnPlaced();
-            piece.m_placeEffect.Create(position, rotation, gameObject.transform);
-            Jotunn.Logger.LogMessage("Placed Piece " + piece.name + " at " + position + "::" + rotation);
-            return gameObject.GetComponent<RaidTowerPiece>();
-        }
+        public static Piece RaidPlankPrefab;
+        public static Piece RaidStairPrefab;
 
         public static RaidTowerPiece PlaceFloorPiece(Vector3 position, Quaternion rotation) {
             TerrainModifier.SetTriggerOnPlaced(trigger: true);
             GameObject gameObject = UnityEngine.Object.Instantiate(FloorPiecePrefab.gameObject, position, rotation);
             TerrainModifier.SetTriggerOnPlaced(trigger: false);
             FloorPiecePrefab.m_placeEffect.Create(position, rotation, gameObject.transform);
-            Jotunn.Logger.LogMessage("Placed Piece " + FloorPiecePrefab.name + " at " + position + "::" + rotation);
+            Jotunn.Logger.LogInfo("Placed Piece " + FloorPiecePrefab.name + " at " + position + "::" + rotation);
             return gameObject.GetComponent<RaidTowerPiece>();
         }
 
@@ -43,11 +34,38 @@ namespace ValheimRaids.Scripts {
 
             RaidRampPrefab.m_placeEffect.Create(position1, rotation1, ramp1.transform);
             RaidRampPrefab.m_placeEffect.Create(position2, rotation2, ramp2.transform);
-            Jotunn.Logger.LogMessage("Placed Piece " + RaidRampPrefab.name + " at " + position1 + "::" + rotation1);
-            Jotunn.Logger.LogMessage("Placed Piece " + RaidRampPrefab.name + " at " + position2 + "::" + rotation2);
+            Jotunn.Logger.LogInfo("Placed Ramp " + RaidRampPrefab.name + " at " + position1 + "::" + rotation1);
+            Jotunn.Logger.LogInfo("Placed Ramp " + RaidRampPrefab.name + " at " + position2 + "::" + rotation2);
 
             floorPiece.rampBuilt1 = ramp1.GetComponent<RaidRamp>();
             floorPiece.rampBuilt2 = ramp2.GetComponent<RaidRamp>();
+        }
+
+        public static RaidPlank PlacePlankPiece(Vector3 position, Quaternion rotation) {
+            TerrainModifier.SetTriggerOnPlaced(trigger: true);
+            GameObject gameObject = UnityEngine.Object.Instantiate(RaidPlankPrefab.gameObject, position, rotation);
+            TerrainModifier.SetTriggerOnPlaced(trigger: false);
+            RaidPlankPrefab.m_placeEffect.Create(position, rotation, gameObject.transform);
+            Jotunn.Logger.LogInfo("Placed Plank " + RaidPlankPrefab.name + " at " + position + "::" + rotation);
+            return gameObject.GetComponent<RaidPlank>();
+        }
+
+        public static RaidRamp PlaceRampPiece(Vector3 position, Quaternion rotation) {
+            TerrainModifier.SetTriggerOnPlaced(trigger: true);
+            GameObject gameObject = UnityEngine.Object.Instantiate(RaidRampPrefab.gameObject, position, rotation);
+            TerrainModifier.SetTriggerOnPlaced(trigger: false);
+            RaidRampPrefab.m_placeEffect.Create(position, rotation, gameObject.transform);
+            Jotunn.Logger.LogInfo("Placed Ramp " + RaidRampPrefab.name + " at " + position + "::" + rotation);
+            return gameObject.GetComponent<RaidRamp>();
+        }
+
+        public static RaidStair PlaceStairPiece(Vector3 position, Quaternion rotation) {
+            TerrainModifier.SetTriggerOnPlaced(trigger: true);
+            GameObject gameObject = UnityEngine.Object.Instantiate(RaidStairPrefab.gameObject, position, rotation);
+            TerrainModifier.SetTriggerOnPlaced(trigger: false);
+            RaidStairPrefab.m_placeEffect.Create(position, rotation, gameObject.transform);
+            Jotunn.Logger.LogInfo("Placed Stair " + RaidStairPrefab.name + " at " + position + "::" + rotation);
+            return gameObject.GetComponent<RaidStair>();
         }
     }
 }

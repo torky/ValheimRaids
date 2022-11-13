@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 namespace ValheimRaids.Scripts {
-    public class RaidRamp : MonoBehaviour {
+    public class RaidRamp : RaidBuildingPiece {
     }
 }
