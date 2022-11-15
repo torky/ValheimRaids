@@ -31,4 +31,11 @@ namespace ValheimRaids.Scripts {
         public const string BuildingPlank = "BuildingPlank";
         public const string DoneBuilding = "DoneBuilding";
     }
+
+    public static class TrebuchetState {
+        public const string Armed = "Armed";
+        public const string Firing = "Firing";
+        public const string Fired = "Fired";
+        public const string Unarmed = "Unarmed";
+    }
 }

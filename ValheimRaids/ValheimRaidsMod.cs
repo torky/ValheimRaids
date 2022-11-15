@@ -66,6 +66,7 @@ namespace ValheimRaids {
 
             var raidTrebuchet = raidAssets.LoadAsset<GameObject>("assets/gameobject/raidtrebuchet.prefab");
             Jotunn.Logger.LogInfo(raidTrebuchet.name);
+            raidTrebuchet.AddComponent<Trebuchet>();
             CustomPiece raidTrebuchetPiece = new CustomPiece(raidTrebuchet, "Hammer", true);
             PieceManager.Instance.AddPiece(raidTrebuchetPiece);
 

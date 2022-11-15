@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1962485802
+CRC: 1747620509
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 0e376cabb851e92fced030a909b2b4b3
+    Hash: eb1a70d8cd382a414411291565016cd7
   TypeTreeHash:
     serializedVersion: 2
     Hash: 3dce26179347dcc568db6163e4dea53f
@@ -161,15 +161,17 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: assembly_valheim
   ClassName: Raven/RavenText
 Assets:
+- Assets/Material/Transparent.mat
 - Assets/GameObject/raid_floor_block.prefab
 - Assets/GameObject/raid_staircase.prefab
 - Assets/GameObject/raid_ramp.prefab
 - Assets/GameObject/DefensePoint.prefab
 - Assets/GameObject/RaidTowerBuilder.prefab
 - Assets/GameObject/raid_floor.prefab
-- Assets/GameObject/RaidTrebuchet.prefab
+- Assets/GameObject/SiegeTrebuchet.prefab
 - Assets/GameObject/raid_plank.prefab
 - Assets/GameObject/RaidGreydwarf.prefab
+- Assets/GameObject/RaidTrebuchet.prefab
 - Assets/GameObject/raid_wood_stair.prefab
 - Assets/GameObject/RaidRampBuilder.prefab
 - Assets/GameObject/view_line.prefab
