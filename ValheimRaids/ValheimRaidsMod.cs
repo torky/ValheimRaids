@@ -8,6 +8,7 @@ using System.IO;
 using UnityEngine;
 using ValheimRaids.Scripts;
 using ValheimRaids.Scripts.AI;
+using ValheimRaids.Scripts.Commands;
 
 namespace ValheimRaids {
     [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
@@ -34,6 +35,7 @@ namespace ValheimRaids {
             Jotunn.Logger.LogInfo(raidAssets.name);
             Jotunn.Logger.LogInfo(string.Join(", ", raidAssets.GetAllAssetNames()));
 
+            // Add pieces
             var raidFloor = raidAssets.LoadAsset<GameObject>("assets/gameobject/raid_floor_block.prefab");
             Jotunn.Logger.LogInfo(raidFloor.name);
             raidFloor.AddComponent<RaidTowerPiece>();
@@ -64,12 +66,14 @@ namespace ValheimRaids {
             PieceManager.Instance.AddPiece(raidStairPiece);
             RampBuilder.Ramps.Add(raidStair.name);
 
-            var raidTrebuchet = raidAssets.LoadAsset<GameObject>("assets/gameobject/raidtrebuchet.prefab");
-            Jotunn.Logger.LogInfo(raidTrebuchet.name);
-            raidTrebuchet.AddComponent<Trebuchet>();
-            CustomPiece raidTrebuchetPiece = new CustomPiece(raidTrebuchet, "Hammer", true);
-            PieceManager.Instance.AddPiece(raidTrebuchetPiece);
+            // Defense point
+            var defensePoint = raidAssets.LoadAsset<GameObject>("assets/gameobject/defensepoint.prefab");
+            Jotunn.Logger.LogInfo(defensePoint.name);
+            defensePoint.AddComponent<RaidPoint>();
+            CustomPiece defensePointPiece = new CustomPiece(defensePoint, "Hammer", false);
+            PieceManager.Instance.AddPiece(defensePointPiece);
 
+            // Add mobs
             var greydwarf = raidAssets.LoadAsset<GameObject>("assets/gameobject/raidgreydwarf.prefab");
             var raidAI = greydwarf.AddComponent<RaidAI>();
             TransferAndCreate(greydwarf, raidAI);
@@ -82,12 +86,17 @@ namespace ValheimRaids {
             var rampbuilderAI = rampbuilder.AddComponent<RampBuilder>();
             TransferAndCreate(rampbuilder, rampbuilderAI);
 
-            var defensePoint = raidAssets.LoadAsset<GameObject>("assets/gameobject/defensepoint.prefab");
-            Jotunn.Logger.LogInfo(defensePoint.name);
-            defensePoint.AddComponent<RaidPoint>();
-            CustomPiece defensePointPiece = new CustomPiece(defensePoint, "Hammer", false);
-            PieceManager.Instance.AddPiece(defensePointPiece);
+            // Trebuchet
+            var raidTrebuchet = raidAssets.LoadAsset<GameObject>("assets/gameobject/raidtrebuchet.prefab");
+            Jotunn.Logger.LogInfo(raidTrebuchet.name);
+            raidTrebuchet.AddComponent<Trebuchet>();
+            CustomPiece raidTrebuchetPiece = new CustomPiece(raidTrebuchet, "Hammer", true);
+            PieceManager.Instance.AddPiece(raidTrebuchetPiece);
+            Trebuchet.AvailableAmmo.Add(greydwarf.name + "(Clone)");
+            Trebuchet.AvailableAmmo.Add(towerbuilder.name + "(Clone)");
+            Trebuchet.AvailableAmmo.Add(rampbuilder.name + "(Clone)");
 
+            CommandManager.Instance.AddConsoleCommand(new TrebuchetTime());
             Jotunn.Logger.LogInfo("Raid AI setup finished...");
         }
 

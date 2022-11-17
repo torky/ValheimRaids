@@ -33,7 +33,7 @@ namespace ValheimRaids.Scripts {
     }
 
     public static class TrebuchetState {
-        public const string Armed = "Armed";
+        public const string Aiming = "Aiming";
         public const string Firing = "Firing";
         public const string Fired = "Fired";
         public const string Unarmed = "Unarmed";

@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 2444655128989351958}
   m_LocalRotation: {x: -0.6830127, y: -0.18301275, z: 0.18301275, w: 0.6830127}
   m_LocalPosition: {x: -3.07, y: 5.4, z: 0}
-  m_LocalScale: {x: 8, y: 0.59999996, z: 0.6}
+  m_LocalScale: {x: 6, y: 0.59999996, z: 0.6}
   m_Children:
   - {fileID: 6071169469777559008}
   m_Father: {fileID: 2598193542947799185}
@@ -121,12 +121,12 @@ HingeJoint:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2444655128989351958}
-  m_ConnectedBody: {fileID: 0}
+  m_ConnectedBody: {fileID: 5647340697261433423}
   m_ConnectedArticulationBody: {fileID: 0}
-  m_Anchor: {x: 0.675, y: -1.5, z: 0}
+  m_Anchor: {x: 0.6, y: -1.5, z: 0.1}
   m_Axis: {x: 0, y: 1, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 1.6065371, y: 8.100001, z: 0.9000001}
+  m_ConnectedAnchor: {x: 0.017691374, y: -2.4999998, z: 0.25196242}
   m_UseSpring: 0
   m_Spring:
     spring: 0
@@ -161,7 +161,6 @@ GameObject:
   - component: {fileID: 1451827450298377897}
   - component: {fileID: 1621518426915367699}
   - component: {fileID: 3638398841340977136}
-  - component: {fileID: 653335460648168929}
   - component: {fileID: 5938316135250812883}
   - component: {fileID: 7129328566943867211}
   m_Layer: 10
@@ -212,7 +211,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: e8c8a545a279e5e40b0432f97f0a713a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -234,19 +233,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &653335460648168929
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2878202452981962254}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &5938316135250812883
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -255,11 +241,11 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2878202452981962254}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -272,10 +258,10 @@ HingeJoint:
   m_GameObject: {fileID: 2878202452981962254}
   m_ConnectedBody: {fileID: 1011764267986236157}
   m_ConnectedArticulationBody: {fileID: 0}
-  m_Anchor: {x: -10, y: 0.8, z: 0}
+  m_Anchor: {x: -8.3, y: 1.8, z: 0}
   m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -1.0001945, y: 0.00000079472863, z: 0.0014992554}
+  m_ConnectedAnchor: {x: -1.0048857, y: 0.00000079472863, z: 0.028208096}
   m_UseSpring: 0
   m_Spring:
     spring: 0
@@ -546,10 +532,10 @@ HingeJoint:
   m_GameObject: {fileID: 3577596955536297869}
   m_ConnectedBody: {fileID: 1011764267986236157}
   m_ConnectedArticulationBody: {fileID: 0}
-  m_Anchor: {x: 0, y: -0.5, z: 2.5}
+  m_Anchor: {x: -1.7, y: 0, z: 1.5}
   m_Axis: {x: 0, y: 1, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.99911195, y: -0.83333415, z: 0.0068334737}
+  m_ConnectedAnchor: {x: 1.003442, y: 0, z: -0.01987497}
   m_UseSpring: 0
   m_Spring:
     spring: 0
@@ -905,6 +891,7 @@ GameObject:
   - component: {fileID: 3699766698123490387}
   - component: {fileID: 7155757172801031343}
   - component: {fileID: 4280423947301831873}
+  - component: {fileID: 5647340697261433423}
   m_Layer: 10
   m_Name: Cube.004
   m_TagString: Untagged
@@ -988,6 +975,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2, y: 1.9999998, z: 1.9999998}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &5647340697261433423
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6761634590985567371}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &7677186547803294352
 GameObject:
   m_ObjectHideFlags: 0
@@ -1000,6 +1003,7 @@ GameObject:
   - component: {fileID: 6185825697064416752}
   - component: {fileID: 8353412093406894907}
   - component: {fileID: 4361302296885488735}
+  - component: {fileID: 1547897160000551255}
   m_Layer: 10
   m_Name: RaidTrebuchet
   m_TagString: Untagged
@@ -1135,6 +1139,23 @@ MonoBehaviour:
     m_effectPrefabs: []
   m_autoCreateFragments: 1
   m_fragmentRoots: []
+--- !u!114 &1547897160000551255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7677186547803294352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1109157524, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_syncPosition: 1
+  m_syncRotation: 1
+  m_syncScale: 0
+  m_syncBodyVelocity: 1
+  m_characterParentSync: 0
 --- !u!1 &8644011981508576268
 GameObject:
   m_ObjectHideFlags: 0

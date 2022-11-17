@@ -41,7 +41,7 @@ namespace ValheimRaids.Scripts {
             ActOutState(dt);
         }
 
-        protected string m_state = AIState.NoTarget;
+        public string m_state = AIState.NoTarget;
         protected string previousState;
 
         public virtual void DetermineState(float dt) {
@@ -70,7 +70,7 @@ namespace ValheimRaids.Scripts {
                 case AIState.Fall:
                     if (TargetIsInRange(dt)) m_state = AIState.TargetWithinRange;
                     else if (HasPathToTarget()) m_state = AIState.Path;
-                    else if (ZoneSystem.instance.GetSolidHeight(transform.position) <= 0) m_state = AIState.NoPath;
+                    else if (IsOnGround()) m_state = AIState.NoPath;
                     break;
                 case TowerState.AbandonTower:
                     if (!TowerExists()) m_state = AIState.HasTarget;
@@ -90,6 +90,12 @@ namespace ValheimRaids.Scripts {
                         else m_state = AIState.Fall;
                     } else if (!IsOnTopOfTower()) m_state = TowerState.AbandonTower;
                     break;
+                case TrebuchetState.Firing:
+                    if (IsOnGround()) m_state = TrebuchetState.Fired;
+                    break;
+                case TrebuchetState.Fired:
+                    m_state = AIState.HasTarget;
+                    break;
                 default:
                     throw new Exception("Acting in unknown RaidAI state! " + m_state);
             }
@@ -98,25 +104,17 @@ namespace ValheimRaids.Scripts {
         public virtual void ActOutState(float dt) {
             switch (m_state) {
                 case AIState.NoTarget:
-                case AIState.NoPath:
-                    StopMoving(); break;
+                case AIState.NoPath: StopMoving(); break;
                 case AIState.HasTarget: break;
-                case AIState.TargetWithinRange:
-                    TargetWithinRange(dt); break;
-                case AIState.Path:
-                    tower = null;
-                    FollowPath(); break;
-                case AIState.Fall:
-                    Fall(); break;
-                case TowerState.AbandonTower:
-                    StopMoving();
-                    tower = null; break;
-                case TowerState.PathUpTower:
-                    FollowPath(); break;
-                case TowerState.OnTopOfTower:
-                    StopMoving(); break;
-                case TowerState.ExitTower:
-                    tower = null; break;
+                case AIState.TargetWithinRange: TargetWithinRange(dt); break;
+                case AIState.Path: tower = null; FollowPath(); break;
+                case AIState.Fall: Fall(); break;
+                case TowerState.AbandonTower: StopMoving(); tower = null; break;
+                case TowerState.PathUpTower: FollowPath(); break;
+                case TowerState.OnTopOfTower: StopMoving(); break;
+                case TowerState.ExitTower: tower = null; break;
+                case TrebuchetState.Firing: StopMoving(); break;
+                case TrebuchetState.Fired: m_body.collisionDetectionMode = CollisionDetectionMode.Discrete; break;
                 default:
                     throw new Exception("Acting in unknown RaidAI state! " + m_state);
             }
@@ -239,6 +237,10 @@ namespace ValheimRaids.Scripts {
             if (raycast.transform?.root?.gameObject?.name == "DefensePoint(Clone)") return false;
             // Jotunn.Logger.LogInfo(raycast.transform?.root?.gameObject?.name);
             return hit;
+        }
+
+        protected bool IsOnGround() {
+            return ZoneSystem.instance.GetSolidHeight(transform.position) <= transform.position.y;
         }
 
         protected bool HasPathToTarget(bool requireFullPath = false) {

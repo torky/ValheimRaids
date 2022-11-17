@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1747620509
+CRC: 2078595578
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: eb1a70d8cd382a414411291565016cd7
+    Hash: e6f99ee17b8f05dcf7a204a91fab06fb
   TypeTreeHash:
     serializedVersion: 2
     Hash: 3dce26179347dcc568db6163e4dea53f
@@ -166,6 +166,7 @@ Assets:
 - Assets/GameObject/raid_staircase.prefab
 - Assets/GameObject/raid_ramp.prefab
 - Assets/GameObject/DefensePoint.prefab
+- Assets/GameObject/RaidTrebuchetV1.prefab
 - Assets/GameObject/RaidTowerBuilder.prefab
 - Assets/GameObject/raid_floor.prefab
 - Assets/GameObject/SiegeTrebuchet.prefab
