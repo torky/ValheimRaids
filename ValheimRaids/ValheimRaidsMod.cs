@@ -25,7 +25,7 @@ namespace ValheimRaids {
         // https://valheim-modding.github.io/Jotunn/tutorials/localization.html
         public static CustomLocalization Localization = LocalizationManager.Instance.GetLocalization();
 
-        private void Awake() {
+        public void Awake() {
             m_harmony.PatchAll();
 
             // Jotunn comes with its own Logger class to provide a consistent Log style for all mods using it
@@ -37,64 +37,81 @@ namespace ValheimRaids {
 
             // Add pieces
             var raidFloor = raidAssets.LoadAsset<GameObject>("assets/gameobject/raid_floor_block.prefab");
-            Jotunn.Logger.LogInfo(raidFloor.name);
             raidFloor.AddComponent<RaidTowerPiece>();
             RaidBuilding.FloorPiecePrefab = raidFloor.GetComponent<Piece>();
             CustomPiece raidFloorPiece = new CustomPiece(raidFloor, "Hammer", true);
             PieceManager.Instance.AddPiece(raidFloorPiece);
+            Jotunn.Logger.LogInfo(raidFloor.name);
 
             var raidRamp = raidAssets.LoadAsset<GameObject>("assets/gameobject/raid_ramp.prefab");
-            Jotunn.Logger.LogInfo(raidRamp.name);
             raidRamp.AddComponent<RaidRamp>();
             RaidBuilding.RaidRampPrefab = raidRamp.GetComponent<Piece>();
             CustomPiece raidRampPiece = new CustomPiece(raidRamp, "Hammer", true);
             PieceManager.Instance.AddPiece(raidRampPiece);
+            Jotunn.Logger.LogInfo(raidRamp.name);
 
             var raidPlank = raidAssets.LoadAsset<GameObject>("assets/gameobject/raid_plank.prefab");
-            Jotunn.Logger.LogInfo(raidPlank.name);
             raidPlank.AddComponent<RaidPlank>();
             RaidBuilding.RaidPlankPrefab = raidPlank.GetComponent<Piece>();
             CustomPiece raidPlankPiece = new CustomPiece(raidPlank, "Hammer", true);
             PieceManager.Instance.AddPiece(raidPlankPiece);
             RampBuilder.Ramps.Add(raidPlank.name);
+            Jotunn.Logger.LogInfo(raidPlank.name);
 
             var raidStair = raidAssets.LoadAsset<GameObject>("assets/gameobject/raid_wood_stair.prefab");
-            Jotunn.Logger.LogInfo(raidStair.name);
             raidStair.AddComponent<RaidStair>();
             RaidBuilding.RaidStairPrefab = raidStair.GetComponent<Piece>();
             CustomPiece raidStairPiece = new CustomPiece(raidStair, "Hammer", true);
             PieceManager.Instance.AddPiece(raidStairPiece);
             RampBuilder.Ramps.Add(raidStair.name);
+            Jotunn.Logger.LogInfo(raidStair.name);
 
             // Defense point
             var defensePoint = raidAssets.LoadAsset<GameObject>("assets/gameobject/defensepoint.prefab");
-            Jotunn.Logger.LogInfo(defensePoint.name);
             defensePoint.AddComponent<RaidPoint>();
             CustomPiece defensePointPiece = new CustomPiece(defensePoint, "Hammer", false);
             PieceManager.Instance.AddPiece(defensePointPiece);
+            Jotunn.Logger.LogInfo(defensePoint.name);
 
             // Add mobs
             var greydwarf = raidAssets.LoadAsset<GameObject>("assets/gameobject/raidgreydwarf.prefab");
             var raidAI = greydwarf.AddComponent<RaidAI>();
             TransferAndCreate(greydwarf, raidAI);
+            Jotunn.Logger.LogInfo(greydwarf.name);
 
             var towerbuilder = raidAssets.LoadAsset<GameObject>("assets/gameobject/raidtowerbuilder.prefab");
             var towerBuilderAI = towerbuilder.AddComponent<TowerBuilder>();
             TransferAndCreate(towerbuilder, towerBuilderAI);
+            Jotunn.Logger.LogInfo(towerbuilder.name);
 
             var rampbuilder = raidAssets.LoadAsset<GameObject>("assets/gameobject/raidrampbuilder.prefab");
             var rampbuilderAI = rampbuilder.AddComponent<RampBuilder>();
             TransferAndCreate(rampbuilder, rampbuilderAI);
+            Jotunn.Logger.LogInfo(rampbuilder.name);
+
+            // Trebuchet shot
+            var trebShot = raidAssets.LoadAsset<GameObject>("assets/gameobject/trebuchetshot.prefab");
+            var projectile = trebShot.AddComponent<RaidProjectile>();
+            projectile.pieces = raidAssets.LoadAsset<GameObject>("assets/gameobject/destroyedshot.prefab");
+            PrefabManager.Instance.AddPrefab(trebShot);
+            Jotunn.Logger.LogInfo(projectile.pieces.name);
+            Jotunn.Logger.LogInfo(trebShot.name);
 
             // Trebuchet
             var raidTrebuchet = raidAssets.LoadAsset<GameObject>("assets/gameobject/raidtrebuchet.prefab");
-            Jotunn.Logger.LogInfo(raidTrebuchet.name);
             raidTrebuchet.AddComponent<Trebuchet>();
             CustomPiece raidTrebuchetPiece = new CustomPiece(raidTrebuchet, "Hammer", true);
             PieceManager.Instance.AddPiece(raidTrebuchetPiece);
             Trebuchet.AvailableAmmo.Add(greydwarf.name + "(Clone)");
             Trebuchet.AvailableAmmo.Add(towerbuilder.name + "(Clone)");
             Trebuchet.AvailableAmmo.Add(rampbuilder.name + "(Clone)");
+            Trebuchet.AvailableAmmo.Add(trebShot.name + "(Clone)");
+            Jotunn.Logger.LogInfo(raidTrebuchet.name);
+
+            // Trebuchet sound
+            var trebSound = raidAssets.LoadAsset<GameObject>("assets/gameobject/sfx_trebuchet_launch.prefab");
+            Trebuchet.LaunchSound = trebSound;
+            Jotunn.Logger.LogInfo(trebSound.name);
 
             CommandManager.Instance.AddConsoleCommand(new TrebuchetTime());
             Jotunn.Logger.LogInfo("Raid AI setup finished...");

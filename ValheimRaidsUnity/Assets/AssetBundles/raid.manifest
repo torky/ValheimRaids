@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 520949639
+CRC: 2341746728
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 3747421da5fe0af0b6f851579d218011
+    Hash: a66e59a411190ca32ba3e1645d641727
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 3dce26179347dcc568db6163e4dea53f
+    Hash: 0a164b0090e796782aa94e209186d467
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -54,11 +54,11 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 313648218, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
 - Class: 114
+  Script: {fileID: 1109157524, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
+- Class: 114
   Script: {fileID: 1521249158, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
 - Class: 114
   Script: {fileID: 469224316, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
-- Class: 114
-  Script: {fileID: 1109157524, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
 - Class: 114
   Script: {fileID: 825357479, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
 - Class: 114
@@ -67,8 +67,6 @@ ClassTypes:
   Script: {fileID: 2094620348, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
 - Class: 114
   Script: {fileID: 1578695569, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
-- Class: 114
-  Script: {fileID: 69470131, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
 - Class: 114
   Script: {fileID: 1541706127, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
 - Class: 114
@@ -99,6 +97,8 @@ ClassTypes:
   Script: {fileID: 829610738, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
 - Class: 114
   Script: {fileID: -2077285929, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
+- Class: 114
+  Script: {fileID: 69470131, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
 - Class: 114
   Script: {fileID: 1282597392, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
 - Class: 114
@@ -161,16 +161,22 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: assembly_valheim
   ClassName: Raven/RavenText
 Assets:
+- Assets/Material/Transparent.mat
 - Assets/GameObject/raid_floor_block.prefab
 - Assets/GameObject/raid_staircase.prefab
 - Assets/GameObject/raid_ramp.prefab
 - Assets/GameObject/DefensePoint.prefab
+- Assets/GameObject/DestroyedShot.prefab
+- Assets/GameObject/RaidTrebuchetV1.prefab
+- Assets/GameObject/sfx_trebuchet_launch.prefab
 - Assets/GameObject/RaidTowerBuilder.prefab
 - Assets/GameObject/raid_floor.prefab
 - Assets/GameObject/SiegeTrebuchet.prefab
+- Assets/GameObject/sfx_trebuchet_shot.prefab
 - Assets/GameObject/raid_plank.prefab
 - Assets/GameObject/RaidGreydwarf.prefab
 - Assets/GameObject/RaidTrebuchet.prefab
+- Assets/GameObject/TrebuchetShot.prefab
 - Assets/GameObject/raid_wood_stair.prefab
 - Assets/GameObject/RaidRampBuilder.prefab
 - Assets/GameObject/view_line.prefab

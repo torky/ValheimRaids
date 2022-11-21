@@ -37,6 +37,7 @@ namespace ValheimRaids.Scripts.AI {
         private static readonly float max = 2.0f;
         public static float? timeOverride;
         public static float? magnitudeOverride;
+        public static GameObject LaunchSound;
 
         public static HashSet<string> AvailableAmmo = new HashSet<string>();
         private readonly float releaseReset = 5f;
@@ -68,6 +69,7 @@ namespace ValheimRaids.Scripts.AI {
             { 55F, 2.00F },
         };
         private static readonly List<float> ranges = new List<float>(RangeToTime.Keys);
+        private static readonly List<float> times = new List<float>(RangeToTime.Values);
 
         public void Awake() {
             m_nview = GetComponent<ZNetView>();
@@ -111,7 +113,7 @@ namespace ValheimRaids.Scripts.AI {
                 float distance = Utils.DistanceXZ(testAmmoPos, RaidPoint.instance.transform.position);
                 var range = ClosestRange(distance);
                 Jotunn.Logger.LogInfo("Aiming for range: " + range);
-                timer = RangeToTime[range];
+                timer = GetVariableTime(range);
             } else {
                 Jotunn.Logger.LogInfo("Randomly shooting");
                 timer = UnityEngine.Random.Range(min, max);
@@ -128,6 +130,14 @@ namespace ValheimRaids.Scripts.AI {
             armRot = arm.rotation;
             testAmmoPos = testAmmo.position;
             testAmmoRot = testAmmo.rotation;
+        }
+
+        public float GetVariableTime(float range) {
+            var time = RangeToTime[range];
+            var i = times.IndexOf(time);
+            var max = time == times.Last() ? time : times[i + 1];
+            var min = time == times.First() ? time : times[i - 1];
+            return UnityEngine.Random.Range(min, max);
         }
 
         private float ClosestRange(float distance) {
@@ -173,19 +183,25 @@ namespace ValheimRaids.Scripts.AI {
                 case TrebuchetState.Aiming:
                     if (RaidPoint.instance == null) {
                         m_state = TrebuchetState.Firing;
+                        Instantiate(LaunchSound);
                         return;
                     }
                     var direction = RaidPoint.instance.transform.position - transform.position;
                     var directionXZ = Utils.DirectionXZ(direction);
 
-                    //create the rotation we need to be in to look at the target
                     var lookRotation = Quaternion.LookRotation(directionXZ) * Quaternion.Euler(0, -90f, 0);
-
-                    //rotate us over time according to speed until we are in the required rotation
                     transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 1f);
+
                     SetUnarmedPositionsAndRotations();
                     LockAmmoToTestAmmo();
-                    if (transform.rotation == lookRotation) m_state = TrebuchetState.Firing;
+                    if (transform.rotation == lookRotation) {
+                        var degree = UnityEngine.Random.Range(-95f, -85f);
+                        var finalRotation = Quaternion.LookRotation(directionXZ) * Quaternion.Euler(0, degree, 0);
+                        transform.rotation = finalRotation;
+
+                        m_state = TrebuchetState.Firing;
+                        Instantiate(LaunchSound, transform.position, transform.rotation);
+                    }
                     break;
                 case TrebuchetState.Firing:
                     if (ammoBody == null) {
@@ -205,6 +221,10 @@ namespace ValheimRaids.Scripts.AI {
                         Jotunn.Logger.LogInfo("Magnitude: " + magnitude);
                         ammoBody.isKinematic = false;
                         ammoBody.collisionDetectionMode = CollisionDetectionMode.Continuous;
+
+                        if (ammo.TryGetComponent(out RaidProjectile projectile)) {
+                            projectile.m_state = TrebuchetState.Fired;
+                        }
 
                         timer = releaseReset;
                         m_state = TrebuchetState.Fired;

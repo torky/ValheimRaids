@@ -2,11 +2,11 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!1 &1918277892421810
 GameObject:
-  serializedVersion: 6
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
   m_Component:
   - component: {fileID: 4916978364786471}
   - component: {fileID: 114518433995155673}
@@ -44,8 +44,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 469224316, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
   m_timeout: 3
   m_triggerOnAwake: 1
 --- !u!114 &114763056166198130
@@ -58,14 +58,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 313648218, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
   m_playOnAwake: 1
   m_audioClips:
-  - {fileID: 8300000, guid: 5f7952d633cd24b44a3d33b4d25177d1, type: 3}
-  - {fileID: 8300000, guid: 6171fa0a4000cb24298f953723fe6e94, type: 3}
-  - {fileID: 8300000, guid: 0ae0d02cd9920f241adb1bb1c73e80b6, type: 3}
-  - {fileID: 8300000, guid: 9f0fe32bc68932346af54ab6debe0e55, type: 3}
+  - {fileID: 0}
   m_maxPitch: 1.1
   m_minPitch: 1
   m_maxVol: 0.8
@@ -84,14 +81,15 @@ MonoBehaviour:
   m_customReverbDistance: 10
 --- !u!82 &82463725039960937
 AudioSource:
-  serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1918277892421810}
   m_Enabled: 1
-  OutputAudioMixerGroup: {fileID: 24300010, guid: 901f74e0f226d3140b3e48b2a56caa99, type: 2}
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 24300010, guid: 901f74e0f226d3140b3e48b2a56caa99,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -215,8 +213,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 1521249158, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
   m_persistent: 0
   m_distant: 0
   m_type: 0
